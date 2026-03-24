@@ -1,0 +1,121 @@
+/* Main Styles */
+* {
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+/* Buttons */
+.button {
+    -fx-padding: 8px 15px;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.button:pressed {
+    -fx-background-color: #1f618d;
+}
+
+/* TextFields */
+.text-field {
+    -fx-padding: 8px;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 4px;
+    -fx-font-size: 11px;
+}
+
+.text-field:focused {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2;
+}
+
+/* ComboBox */
+.combo-box {
+    -fx-padding: 8px;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 4px;
+    -fx-font-size: 11px;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 12px;
+}
+
+/* TableView */
+.table-view {
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1;
+}
+
+.table-column {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-view:focused {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2;
+}
+
+/* Separator */
+.separator {
+    -fx-border-color: #bdc3c7;
+}
+
+/* ScrollPane */
+.scroll-pane {
+    -fx-padding: 5;
+}
+
+/* Modern dark theme for sidebar */
+.sidebar {
+    -fx-background-color: #34495e;
+}
+
+.sidebar .label {
+    -fx-text-fill: white;
+}
+
+.sidebar .button {
+    -fx-background-color: #2c3e50;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.sidebar .button:hover {
+    -fx-background-color: #34495e;
+}
+
+/* Alert Styles */
+.alert {
+    -fx-font-family: 'Segoe UI';
+}
+
+/* Product Button Styling */
+.product-button {
+    -fx-font-size: 12px;
+    -fx-padding: 15px;
+    -fx-background-color: #ecf0f1;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+    -fx-text-fill: #2c3e50;
+    -fx-cursor: hand;
+}
+
+.product-button:hover {
+    -fx-background-color: #d5dbdb;
+    -fx-border-color: #3498db;
+    -fx-border-width: 2;
+}
+
+.product-button:pressed {
+    -fx-background-color: #bdc3c7;
+}

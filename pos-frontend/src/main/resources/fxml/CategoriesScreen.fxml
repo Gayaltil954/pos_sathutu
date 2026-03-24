@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.posystem.fx.controller.CategoriesScreenController">
+
+    <!-- Top: Add Category Form -->
+    <top>
+        <VBox style="-fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-width: 0 0 1 0; -fx-spacing: 10;">
+            <Label text="Category Management" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+            
+            <HBox spacing="10" style="-fx-padding: 10;">
+                <Label text="Category Name:" style="-fx-alignment: CENTER;"/>
+                <TextField fx:id="nameField" prefWidth="200"/>
+
+                <Label text="Description:" style="-fx-alignment: CENTER;"/>
+                <TextField fx:id="descriptionField" prefWidth="300"/>
+
+                <Button text="Add Category" onAction="#addCategory" style="-fx-padding: 8 15;"/>
+                <Button text="Delete Selected" onAction="#deleteCategory" style="-fx-padding: 8 15;"/>
+                <Button text="Refresh" onAction="#refreshCategories" style="-fx-padding: 8 15;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center: Categories Table -->
+    <center>
+        <TableView fx:id="categoryTable" style="-fx-padding: 15;">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Category Name" prefWidth="200"/>
+                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="400"/>
+            </columns>
+        </TableView>
+    </center>
+
+</BorderPane>

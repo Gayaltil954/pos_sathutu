@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.posystem.fx.controller.PosScreenController">
+
+    <!-- Products Section -->
+    <top>
+        <VBox style="-fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-width: 0 0 1 0;">
+            <Label text="Products" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+            
+            <HBox spacing="10" style="-fx-padding: 10 0;">
+                <Label text="Category:" style="-fx-alignment: CENTER;"/>
+                <ComboBox fx:id="categoryCombo" prefWidth="150"/>
+                
+                <Label text="Search:" style="-fx-alignment: CENTER;"/>
+                <TextField fx:id="searchBar" prefWidth="200" promptText="Search by product name..."/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center: Products Grid and Cart -->
+    <center>
+        <HBox spacing="15" style="-fx-padding: 15;">
+            <!-- Products Grid -->
+            <ScrollPane hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" style="-fx-fit-to-width: true;" HBox.hgrow="ALWAYS">
+                <TilePane fx:id="productsContainer" prefColumns="3" hgap="12" vgap="12" style="-fx-padding: 10;"/>
+            </ScrollPane>
+
+            <!-- Cart Section -->
+            <VBox spacing="10" style="-fx-border-color: #bdc3c7; -fx-border-width: 1 0 0 1; -fx-padding: 15;" prefWidth="350">
+                <Label text="Shopping Cart" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                
+                <!-- Cart Table -->
+                <TableView fx:id="cartTable" style="-fx-font-size: 11;" VBox.vgrow="ALWAYS" prefHeight="300">
+                    <columns>
+                        <TableColumn fx:id="productNameColumn" text="Product" prefWidth="100"/>
+                        <TableColumn fx:id="quantityColumn" text="Qty" prefWidth="50"/>
+                        <TableColumn fx:id="priceColumn" text="Price" prefWidth="70"/>
+                        <TableColumn fx:id="subtotalColumn" text="Subtotal" prefWidth="70"/>
+                    </columns>
+                </TableView>
+
+                <!-- Bill Summary -->
+                <VBox spacing="8" style="-fx-padding: 10; -fx-border-color: #bdc3c7; -fx-border-width: 1 0 0 0;">
+                    <HBox>
+                        <Label text="Subtotal:" prefWidth="100"/>
+                        <Label fx:id="subtotalLabel" text="Rs 0.00" style="-fx-text-alignment: RIGHT;" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <HBox>
+                        <Label text="Discount:" prefWidth="100"/>
+                        <TextField fx:id="discountInput" promptText="0" prefWidth="100"/>
+                    </HBox>
+
+                    <Separator/>
+
+                    <HBox style="-fx-font-size: 14; -fx-font-weight: bold;">
+                        <Label text="Total:" prefWidth="100"/>
+                        <Label fx:id="totalLabel" text="Rs 0.00" style="-fx-text-alignment: RIGHT;" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Action Buttons -->
+                <HBox spacing="5">
+                    <Button text="Checkout" style="-fx-padding: 10;" onAction="#checkout" HBox.hgrow="ALWAYS" prefWidth="100"/>
+                    <Button text="Clear" style="-fx-padding: 10;" onAction="#clearCart" HBox.hgrow="ALWAYS" prefWidth="100"/>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+
+</BorderPane>

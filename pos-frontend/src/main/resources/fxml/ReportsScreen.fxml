@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.posystem.fx.controller.ReportsScreenController">
+
+    <!-- Content -->
+    <center>
+        <TabPane style="-fx-padding: 15;">
+            <!-- Daily Summary Tab -->
+            <Tab text="Daily Summary" closable="false">
+                <VBox spacing="15" style="-fx-padding: 20;">
+                    <HBox spacing="10">
+                        <Label text="Select Date:" style="-fx-alignment: CENTER;"/>
+                        <DatePicker fx:id="datePickerDaily"/>
+                        <Button text="Load Summary" onAction="#loadDailySummary" style="-fx-padding: 5 15;"/>
+                    </HBox>
+
+                    <GridPane hgap="30" vgap="20" style="-fx-padding: 20; -fx-border-color: #bdc3c7; -fx-border-width: 1;">
+                        <Label text="Total Sales:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label fx:id="totalSalesLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #27ae60;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Total Discount:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <Label fx:id="dailyTotalDiscountLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #e74c3c;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Transactions:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label fx:id="dailyTransactionsLabel" text="0" style="-fx-font-size: 16; -fx-text-fill: #3498db;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </GridPane>
+                </VBox>
+            </Tab>
+
+            <!-- Monthly Summary Tab -->
+            <Tab text="Monthly Summary" closable="false">
+                <VBox spacing="15" style="-fx-padding: 20;">
+                    <HBox spacing="10">
+                        <Label text="Select Month:" style="-fx-alignment: CENTER;"/>
+                        <ComboBox fx:id="monthCombo" prefWidth="150"/>
+                        <Button text="Load Summary" onAction="#loadMonthlySummary" style="-fx-padding: 5 15;"/>
+                    </HBox>
+
+                    <GridPane hgap="30" vgap="20" style="-fx-padding: 20; -fx-border-color: #bdc3c7; -fx-border-width: 1;">
+                        <Label text="Total Revenue:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label fx:id="revenueLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #27ae60;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Total Discount:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <Label fx:id="monthlyTotalDiscountLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #e74c3c;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Transactions:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label fx:id="monthlyTransactionsLabel" text="0" style="-fx-font-size: 16; -fx-text-fill: #3498db;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </GridPane>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+
+</BorderPane>
