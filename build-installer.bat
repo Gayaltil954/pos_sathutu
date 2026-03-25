@@ -36,7 +36,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo [3/7] Copying frontend runtime dependencies...
+echo [3/8] Copying frontend runtime dependencies...
 call mvn -f pos-frontend\pom.xml dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=target\dependencies
 if errorlevel 1 (
     echo ERROR: Failed to copy frontend dependencies.
@@ -44,15 +44,29 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo [4/7] Preparing jpackage input folder...
+echo [4/8] Copying backend runtime dependencies...
+call mvn -f pos-backend\pom.xml dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=target\dependencies
+if errorlevel 1 (
+    echo ERROR: Failed to copy backend dependencies.
+    if "%SHOULD_PAUSE%"=="1" pause
+    exit /b 1
+)
+
+echo [5/8] Preparing jpackage input folder...
 if exist dist rmdir /s /q dist
 mkdir dist\input
 mkdir dist\installer
 
 set FRONTEND_JAR=
-for %%F in (pos-frontend\target\pos-frontend-*.jar) do (
-    echo %%~nxF | findstr /i /v ".jar.original" >nul
-    if not errorlevel 1 set FRONTEND_JAR=%%~fF
+for %%F in (pos-frontend\target\pos-frontend-*.jar.original) do (
+    set FRONTEND_JAR=%%~fF
+)
+
+if "%FRONTEND_JAR%"=="" (
+    for %%F in (pos-frontend\target\pos-frontend-*.jar) do (
+        echo %%~nxF | findstr /i /v ".jar.original" >nul
+        if not errorlevel 1 set FRONTEND_JAR=%%~fF
+    )
 )
 
 if "%FRONTEND_JAR%"=="" (
@@ -62,9 +76,15 @@ if "%FRONTEND_JAR%"=="" (
 )
 
 set BACKEND_JAR=
-for %%F in (pos-backend\target\pos-backend-*.jar) do (
-    echo %%~nxF | findstr /i /v ".jar.original" >nul
-    if not errorlevel 1 set BACKEND_JAR=%%~fF
+for %%F in (pos-backend\target\pos-backend-*.jar.original) do (
+    set BACKEND_JAR=%%~fF
+)
+
+if "%BACKEND_JAR%"=="" (
+    for %%F in (pos-backend\target\pos-backend-*.jar) do (
+        echo %%~nxF | findstr /i /v ".jar.original" >nul
+        if not errorlevel 1 set BACKEND_JAR=%%~fF
+    )
 )
 
 if "%BACKEND_JAR%"=="" (
@@ -73,10 +93,11 @@ if "%BACKEND_JAR%"=="" (
     exit /b 1
 )
 
-echo [5/7] Copying app artifacts...
+echo [6/8] Copying app artifacts...
 copy /y "%FRONTEND_JAR%" dist\input\pos-frontend.jar >nul
 copy /y "%BACKEND_JAR%" dist\input\pos-backend.jar >nul
 xcopy /e /i /y pos-frontend\target\dependencies dist\input >nul
+xcopy /e /i /y pos-backend\target\dependencies dist\input >nul
 
 set ICON_ARG=
 if exist assets\app-icon.ico (
@@ -89,7 +110,7 @@ if exist assets\app-icon.ico (
     echo No custom icon found. Default app icon will be used.
 )
 
-echo [6/7] Running jpackage...
+echo [7/8] Running jpackage...
 where candle.exe >nul 2>&1
 if errorlevel 1 goto APP_IMAGE_FALLBACK
 where light.exe >nul 2>&1
@@ -101,6 +122,9 @@ jpackage ^
     --input dist\input ^
     --main-jar pos-frontend.jar ^
     --main-class com.posystem.fx.PosFxApplication ^
+    --java-options "--module-path" ^
+    --java-options "$APPDIR" ^
+    --java-options "--add-modules=javafx.controls,javafx.fxml" ^
     --dest dist\installer ^
     --win-shortcut ^
     --win-menu ^
@@ -109,9 +133,8 @@ jpackage ^
     --description "Point of Sale Desktop Application"
 
 if errorlevel 1 (
-        echo ERROR: EXE packaging failed.
-    if "%SHOULD_PAUSE%"=="1" pause
-        exit /b 1
+    echo WARNING: EXE packaging failed. Falling back to portable app-image...
+    goto APP_IMAGE_FALLBACK
 )
 goto PACKAGE_DONE
 
@@ -123,6 +146,9 @@ jpackage ^
     --input dist\input ^
     --main-jar pos-frontend.jar ^
     --main-class com.posystem.fx.PosFxApplication ^
+    --java-options "--module-path" ^
+    --java-options "$APPDIR" ^
+    --java-options "--add-modules=javafx.controls,javafx.fxml" ^
     --dest dist\installer ^
     %ICON_ARG% ^
     --vendor "POS System" ^
@@ -136,7 +162,7 @@ if errorlevel 1 (
 
 :PACKAGE_DONE
 
-echo [7/7] Done.
+echo [8/8] Done.
 echo Installer created in: dist\installer
 echo.
 if "%SHOULD_PAUSE%"=="1" pause

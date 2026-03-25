@@ -527,7 +527,7 @@ All files are organized, documented, and ready for immediate use.
 
 ## 🎉 You Have Everything You Need!
 
-This is a **complete, production-ready Point of Sale System** for **GAYAL MOBILE SHOP**.
+This is a **complete, production-ready Point of Sale System** for **SATHUTU MOBILE SHOP**.
 
 **Start with**: SETUP.md or start.bat/start.sh
 

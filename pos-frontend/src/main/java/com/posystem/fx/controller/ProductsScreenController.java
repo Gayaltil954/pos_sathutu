@@ -4,14 +4,17 @@ import com.posystem.fx.dto.ProductDTO;
 import com.posystem.fx.service.ApiService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Base64;
@@ -39,6 +42,9 @@ public class ProductsScreenController {
     private TableColumn<ProductDTO, Integer> stockColumn;
 
     @FXML
+    private TableColumn<ProductDTO, Void> actionColumn;
+
+    @FXML
     private TextField nameField;
 
     @FXML
@@ -62,7 +68,12 @@ public class ProductsScreenController {
     @FXML
     private Label imageNameLabel;
 
+    @FXML
+    private Button addProductButton;
+
     private File selectedImageFile;
+    private String editingProductId;
+    private String existingImageData;
 
     @FXML
     public void initialize() {
@@ -76,6 +87,33 @@ public class ProductsScreenController {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        setupActionColumn();
+    }
+
+    private void setupActionColumn() {
+        actionColumn.setCellFactory(col -> new TableCell<>() {
+            private final Button editButton = new Button("Edit");
+            private final Button deleteButton = new Button("Delete");
+            private final HBox actions = new HBox(8, editButton, deleteButton);
+
+            {
+                actions.setAlignment(Pos.CENTER);
+                editButton.setOnAction(event -> {
+                    ProductDTO product = getTableView().getItems().get(getIndex());
+                    startEditProduct(product);
+                });
+                deleteButton.setOnAction(event -> {
+                    ProductDTO product = getTableView().getItems().get(getIndex());
+                    deleteProductById(product);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : actions);
+            }
+        });
     }
 
     private void loadCategories() {
@@ -118,38 +156,102 @@ public class ProductsScreenController {
                     String encodedImage = Base64.getEncoder().encodeToString(imageBytes);
                     product.setImageData(encodedImage);
                 }
+            } else if (editingProductId != null && existingImageData != null) {
+                product.setImageData(existingImageData);
             }
 
-            ProductDTO savedProduct = apiService.addProduct(product);
-            if (savedProduct == null || savedProduct.getId() == null) {
-                showError("Failed to save product to database");
-                return;
+            ProductDTO savedProduct;
+            if (editingProductId != null) {
+                savedProduct = apiService.updateProduct(editingProductId, product);
+                if (savedProduct == null || savedProduct.getId() == null) {
+                    showError("Failed to update product");
+                    return;
+                }
+                showInfo("Product updated successfully");
+            } else {
+                savedProduct = apiService.addProduct(product);
+                if (savedProduct == null || savedProduct.getId() == null) {
+                    showError("Failed to save product to database");
+                    return;
+                }
+                showInfo("Product added successfully");
             }
 
-            showInfo("Product added successfully");
             clearFields();
             refreshProducts();
         } catch (Exception e) {
-            showError("Error adding product: " + e.getMessage());
+            showError("Error saving product: " + e.getMessage());
         }
     }
 
     @FXML
     private void deleteProduct() {
         ProductDTO selected = productTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
+        if (selected == null) {
+            showError("Please select a product");
+            return;
+        }
+        deleteProductById(selected);
+    }
+
+    private void deleteProductById(ProductDTO product) {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirm Delete");
+        confirmAlert.setHeaderText("Delete Product");
+        confirmAlert.setContentText("Are you sure you want to delete '" + product.getName() + "'?");
+
+        if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            boolean deleted = apiService.deleteProduct(product.getId());
+            if (!deleted) {
+                showError("Failed to delete product");
+                return;
+            }
+
+            showInfo("Product deleted successfully");
+            if (product.getId().equals(editingProductId)) {
+                clearFields();
+            }
+            refreshProducts();
+        } catch (Exception e) {
+            showError("Error deleting product: " + e.getMessage());
+        }
+    }
+
+    private void startEditProduct(ProductDTO product) {
+        if (product == null) {
+            return;
+        }
+
+        editingProductId = product.getId();
+        existingImageData = product.getImageData();
+
+        nameField.setText(product.getName());
+        categoryField.setValue(product.getCategory());
+        priceField.setText(String.valueOf(product.getPrice()));
+        qrCodeField.setText(product.getQrCode());
+        stockField.setText(String.valueOf(product.getStock()));
+        descriptionField.setText(product.getDescription());
+
+        selectedImageFile = null;
+        if (existingImageData != null && !existingImageData.isBlank()) {
             try {
-                // API call to delete product
-                // apiService.deleteProduct(selected.getId());
-                
-                showInfo("Product deleted successfully");
-                refreshProducts();
-            } catch (Exception e) {
-                showError("Error deleting product");
+                byte[] imageBytes = Base64.getDecoder().decode(existingImageData);
+                imagePreview.setImage(new Image(new ByteArrayInputStream(imageBytes)));
+                imageNameLabel.setText("Existing image");
+            } catch (Exception ignored) {
+                imagePreview.setImage(null);
+                imageNameLabel.setText("No image selected");
             }
         } else {
-            showError("Please select a product");
+            imagePreview.setImage(null);
+            imageNameLabel.setText("No image selected");
         }
+
+        addProductButton.setText("Update Product");
     }
 
     @FXML
@@ -197,8 +299,11 @@ public class ProductsScreenController {
         stockField.clear();
         descriptionField.clear();
         selectedImageFile = null;
+        editingProductId = null;
+        existingImageData = null;
         imagePreview.setImage(null);
         imageNameLabel.setText("No image selected");
+        addProductButton.setText("Add Product");
     }
 
     private void showError(String message) {

@@ -40,7 +40,7 @@
             </GridPane>
 
             <HBox spacing="10" style="-fx-padding: 10 0;">
-                <Button text="Add Product" onAction="#addProduct" style="-fx-padding: 8 15;"/>
+                <Button fx:id="addProductButton" text="Add Product" onAction="#addProduct" style="-fx-padding: 8 15;"/>
                 <Button text="Search" onAction="#searchProducts" style="-fx-padding: 8 15;"/>
                 <Button text="Delete Selected" onAction="#deleteProduct" style="-fx-padding: 8 15;"/>
                 <Button text="Refresh" onAction="#refreshProducts" style="-fx-padding: 8 15;"/>
@@ -56,6 +56,7 @@
                 <TableColumn fx:id="categoryColumn" text="Category" prefWidth="120"/>
                 <TableColumn fx:id="priceColumn" text="Price" prefWidth="100"/>
                 <TableColumn fx:id="stockColumn" text="Stock" prefWidth="100"/>
+                <TableColumn fx:id="actionColumn" text="Actions" prefWidth="180"/>
             </columns>
         </TableView>
     </center>

@@ -431,7 +431,7 @@ GET /api/sales/bill/text/{id}
 {
   "success": true,
   "message": "Bill generated",
-  "data": "----------------------------\n   GAYAL MOBILE SHOP\n----------------------------\nDate: 2026-03-20\nTime: 10:45 AM\n\nItems:\nMouse x2      5000\n\nSubtotal:     5000\nDiscount:     500\n----------------------------\nTotal:        4500\n----------------------------\nThank You!\n"
+  "data": "----------------------------\n   SATHUTU MOBILE SHOP\n----------------------------\nDate: 2026-03-20\nTime: 10:45 AM\n\nItems:\nMouse x2      5000\n\nSubtotal:     5000\nDiscount:     500\n----------------------------\nTotal:        4500\n----------------------------\nThank You!\n"
 }
 ```
 

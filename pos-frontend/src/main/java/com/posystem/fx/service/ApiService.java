@@ -10,6 +10,9 @@ import com.posystem.fx.dto.MonthlySummaryDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -117,6 +120,35 @@ public class ApiService {
         return null;
     }
 
+    public ProductDTO updateProduct(String id, ProductDTO productDTO) {
+        try {
+            HttpEntity<ProductDTO> request = new HttpEntity<>(productDTO);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    baseUrl + "/products/" + id,
+                    HttpMethod.PUT,
+                    request,
+                    String.class
+            );
+            ApiResponse<?> apiResponse = objectMapper.readValue(responseEntity.getBody(), ApiResponse.class);
+            if (apiResponse != null && apiResponse.isSuccess()) {
+                return objectMapper.convertValue(apiResponse.getData(), ProductDTO.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean deleteProduct(String id) {
+        try {
+            restTemplate.delete(baseUrl + "/products/" + id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // Category Operations
     public List<CategoryDTO> getAllCategories() {
         try {
@@ -140,6 +172,48 @@ public class ApiService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public CategoryDTO addCategory(CategoryDTO categoryDTO) {
+        try {
+            String response = restTemplate.postForObject(baseUrl + "/categories", categoryDTO, String.class);
+            ApiResponse<?> apiResponse = objectMapper.readValue(response, ApiResponse.class);
+            if (apiResponse != null && apiResponse.isSuccess()) {
+                return objectMapper.convertValue(apiResponse.getData(), CategoryDTO.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public CategoryDTO updateCategory(String id, CategoryDTO categoryDTO) {
+        try {
+            HttpEntity<CategoryDTO> request = new HttpEntity<>(categoryDTO);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    baseUrl + "/categories/" + id,
+                    HttpMethod.PUT,
+                    request,
+                    String.class
+            );
+            ApiResponse<?> apiResponse = objectMapper.readValue(responseEntity.getBody(), ApiResponse.class);
+            if (apiResponse != null && apiResponse.isSuccess()) {
+                return objectMapper.convertValue(apiResponse.getData(), CategoryDTO.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean deleteCategory(String id) {
+        try {
+            restTemplate.delete(baseUrl + "/categories/" + id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // Sales Operations

@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.swing.JOptionPane;
@@ -49,7 +50,7 @@ public class PosFxApplication extends Application {
         Scene scene = new Scene(root, 1400, 800);
         scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
-        stage.setTitle("POS System - GAYAL MOBILE SHOP");
+        stage.setTitle("POS System - SATHUTU MOBILE SHOP");
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {
             if (springContext != null) {
@@ -63,7 +64,9 @@ public class PosFxApplication extends Application {
 
     public static void main(String[] args) {
         try {
-            springContext = SpringApplication.run(PosFxApplication.class, args);
+            SpringApplication springApplication = new SpringApplication(PosFxApplication.class);
+            springApplication.setWebApplicationType(WebApplicationType.NONE);
+            springContext = springApplication.run(args);
             launch();
         } catch (Throwable throwable) {
             writeFatalError(throwable);

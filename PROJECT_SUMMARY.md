@@ -2,7 +2,7 @@
 
 ## 🎉 Project Complete!
 
-A **modern, production-ready Point of Sale (POS) desktop application** has been successfully created for **GAYAL MOBILE SHOP**.
+A **modern, production-ready Point of Sale (POS) desktop application** has been successfully created for **SATHUTU MOBILE SHOP**.
 
 ---
 
@@ -420,7 +420,7 @@ This project demonstrates:
 
 ## 🙏 Thank You!
 
-This complete POS system is ready to transform GAYAL MOBILE SHOP's point-of-sale operations with modern technology and professional design.
+This complete POS system is ready to transform SATHUTU MOBILE SHOP's point-of-sale operations with modern technology and professional design.
 
 **Let's go sell! 🚀**
 

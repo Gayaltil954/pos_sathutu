@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class BillService {
 
-    private static final String SHOP_NAME = "GAYAL MOBILE SHOP";
+    private static final String SHOP_NAME = "SATHUTU MOBILE SHOP";
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm a");
 

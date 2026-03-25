@@ -17,7 +17,7 @@
                 <Label text="Description:" style="-fx-alignment: CENTER;"/>
                 <TextField fx:id="descriptionField" prefWidth="300"/>
 
-                <Button text="Add Category" onAction="#addCategory" style="-fx-padding: 8 15;"/>
+                <Button fx:id="addCategoryButton" text="Add Category" onAction="#addCategory" style="-fx-padding: 8 15;"/>
                 <Button text="Delete Selected" onAction="#deleteCategory" style="-fx-padding: 8 15;"/>
                 <Button text="Refresh" onAction="#refreshCategories" style="-fx-padding: 8 15;"/>
             </HBox>
@@ -30,6 +30,7 @@
             <columns>
                 <TableColumn fx:id="nameColumn" text="Category Name" prefWidth="200"/>
                 <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="400"/>
+                <TableColumn fx:id="actionColumn" text="Actions" prefWidth="180"/>
             </columns>
         </TableView>
     </center>
