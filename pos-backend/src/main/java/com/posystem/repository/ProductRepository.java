@@ -16,11 +16,19 @@ public interface ProductRepository extends MongoRepository<Product, String> {
 
     List<Product> findByNameContainsIgnoreCase(String name);
 
+    List<Product> findByNameContainsIgnoreCaseAndActive(String name, Boolean active);
+
     List<Product> findByCategoryAndNameContainsIgnoreCase(String category, String name);
+
+    List<Product> findByCategoryAndNameContainsIgnoreCaseAndActive(String category, String name, Boolean active);
 
     Optional<Product> findByQrCode(String qrCode);
 
     List<Product> findByActive(Boolean active);
 
     List<Product> findByCategoryAndActive(String category, Boolean active);
+
+    List<Product> findByStockLessThanEqualAndActive(int stock, Boolean active);
+
+    long countByStockLessThanEqualAndActive(int stock, Boolean active);
 }

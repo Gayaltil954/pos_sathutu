@@ -3,11 +3,17 @@ setlocal enabledelayedexpansion
 
 set SHOULD_PAUSE=1
 if /i "%NON_INTERACTIVE%"=="1" set SHOULD_PAUSE=0
+set APP_VERSION=1.3.7
+set APP_UPGRADE_UUID=2f515612-419f-4f53-aac3-2df8d5f2f0ec
+if "%OUTPUT_DIR%"=="" set OUTPUT_DIR=dist\installer
 
 echo.
 echo ========================================
-echo   POS System - Windows Installer Build
+echo   POS System - Windows Installer Build v%APP_VERSION%
 echo ========================================
+echo.
+echo Upgrade UUID: %APP_UPGRADE_UUID%
+echo Output directory: %OUTPUT_DIR%
 echo.
 
 cd /d "%~dp0"
@@ -55,7 +61,7 @@ if errorlevel 1 (
 echo [5/8] Preparing jpackage input folder...
 if exist dist rmdir /s /q dist
 mkdir dist\input
-mkdir dist\installer
+if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
 set FRONTEND_JAR=
 for %%F in (pos-frontend\target\pos-frontend-*.jar.original) do (
@@ -119,13 +125,15 @@ if errorlevel 1 goto APP_IMAGE_FALLBACK
 jpackage ^
     --type exe ^
     --name "POS System" ^
+    --app-version %APP_VERSION% ^
+    --win-upgrade-uuid %APP_UPGRADE_UUID% ^
     --input dist\input ^
     --main-jar pos-frontend.jar ^
     --main-class com.posystem.fx.PosFxApplication ^
     --java-options "--module-path" ^
     --java-options "$APPDIR" ^
     --java-options "--add-modules=javafx.controls,javafx.fxml" ^
-    --dest dist\installer ^
+    --dest "%OUTPUT_DIR%" ^
     --win-shortcut ^
     --win-menu ^
     %ICON_ARG% ^
@@ -143,13 +151,14 @@ echo WiX tools not found. Creating portable app-image instead...
 jpackage ^
     --type app-image ^
     --name "POS System" ^
+    --app-version %APP_VERSION% ^
     --input dist\input ^
     --main-jar pos-frontend.jar ^
     --main-class com.posystem.fx.PosFxApplication ^
     --java-options "--module-path" ^
     --java-options "$APPDIR" ^
     --java-options "--add-modules=javafx.controls,javafx.fxml" ^
-    --dest dist\installer ^
+    --dest "%OUTPUT_DIR%" ^
     %ICON_ARG% ^
     --vendor "POS System" ^
     --description "Point of Sale Desktop Application"
@@ -163,6 +172,6 @@ if errorlevel 1 (
 :PACKAGE_DONE
 
 echo [8/8] Done.
-echo Installer created in: dist\installer
+echo Installer created in: %OUTPUT_DIR%
 echo.
 if "%SHOULD_PAUSE%"=="1" pause

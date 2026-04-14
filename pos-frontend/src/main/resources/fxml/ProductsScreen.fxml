@@ -11,6 +11,7 @@
     <top>
         <VBox style="-fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-width: 0 0 1 0; -fx-spacing: 10;">
             <Label text="Product Management" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+            <Label fx:id="lowStockSummaryLabel" text="" visible="false" managed="false" style="-fx-text-fill: #c0392b; -fx-font-size: 12; -fx-font-weight: bold;"/>
             
             <GridPane hgap="10" vgap="10" style="-fx-padding: 10;">
                 <Label text="Product Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
@@ -22,17 +23,20 @@
                 <Label text="Price:" GridPane.columnIndex="4" GridPane.rowIndex="0"/>
                 <TextField fx:id="priceField" GridPane.columnIndex="5" GridPane.rowIndex="0" prefWidth="100"/>
 
-                <Label text="QR Code:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <TextField fx:id="qrCodeField" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="200"/>
+                <Label text="Base Price:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="basePriceField" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="200"/>
 
-                <Label text="Stock:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <TextField fx:id="stockField" GridPane.columnIndex="3" GridPane.rowIndex="1" prefWidth="150"/>
+                <Label text="QR Code:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <TextField fx:id="qrCodeField" GridPane.columnIndex="3" GridPane.rowIndex="1" prefWidth="150"/>
 
-                <Label text="Description:" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
-                <TextField fx:id="descriptionField" GridPane.columnIndex="5" GridPane.rowIndex="1" prefWidth="150"/>
+                <Label text="Stock:" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+                <TextField fx:id="stockField" GridPane.columnIndex="5" GridPane.rowIndex="1" prefWidth="150"/>
 
-                <Label text="Product Image:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                <HBox spacing="5" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" prefWidth="150"/>
+
+                <Label text="Product Image:" GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+                <HBox spacing="5" GridPane.columnIndex="5" GridPane.rowIndex="2">
                     <Button text="Choose Image" onAction="#chooseImage" style="-fx-padding: 5 10;"/>
                     <ImageView fx:id="imagePreview" fitHeight="50" fitWidth="50" preserveRatio="true" style="-fx-border-color: #bdc3c7;"/>
                     <Label fx:id="imageNameLabel" text="No image selected"/>
@@ -55,6 +59,7 @@
                 <TableColumn fx:id="nameColumn" text="Product Name" prefWidth="150"/>
                 <TableColumn fx:id="categoryColumn" text="Category" prefWidth="120"/>
                 <TableColumn fx:id="priceColumn" text="Price" prefWidth="100"/>
+                <TableColumn fx:id="basePriceColumn" text="Base Price" prefWidth="100"/>
                 <TableColumn fx:id="stockColumn" text="Stock" prefWidth="100"/>
                 <TableColumn fx:id="actionColumn" text="Actions" prefWidth="180"/>
             </columns>

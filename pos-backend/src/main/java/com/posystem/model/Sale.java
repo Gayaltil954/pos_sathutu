@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Sale {
 
     private double finalTotal;
 
+    @Indexed
     private LocalDateTime date;
 
     private String paymentMethod;
@@ -44,6 +46,7 @@ public class Sale {
         private String category;
         private int quantity;
         private double price;
+        private double basePrice;
         private double itemTotal;
     }
 }

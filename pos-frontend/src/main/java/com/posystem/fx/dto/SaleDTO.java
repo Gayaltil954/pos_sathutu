@@ -28,6 +28,7 @@ public class SaleDTO {
         private String category;
         private int quantity;
         private double price;
+        private double basePrice;
         private double itemTotal;
     }
 }

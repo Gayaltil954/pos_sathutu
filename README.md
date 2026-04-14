@@ -1,5 +1,7 @@
 # POS System - Point of Sale Desktop Application
 
+Current version: 1.3.7
+
 A modern, production-ready Point of Sale (POS) system built with **Spring Boot** backend and **JavaFX** frontend, integrated with MongoDB database.
 
 ## 🎯 Features
@@ -32,7 +34,7 @@ A modern, production-ready Point of Sale (POS) system built with **Spring Boot**
 - ✅ Transaction notes
 
 ### 5. Reports & Analytics
-- ✅ Daily sales summary (total, discount, transactions)
+- ✅ Daily sales summary (total sales, total discount, net total, transactions)
 - ✅ Monthly revenue reports
 - ✅ Most sold products
 - ✅ Category-wise sales breakdown
@@ -374,7 +376,10 @@ For issues or questions:
 
 ## 🎯 Future Enhancements
 
-- [ ] Inventory alerts
+- [x] Inventory alerts
+- [x] Editable sales records
+- [x] Auto stock synchronization on sale create/edit
+- [x] App version/update notification with changelog
 - [ ] User authentication
 - [ ] Multiple payment methods
 - [ ] Barcode scanning support
@@ -385,5 +390,5 @@ For issues or questions:
 
 ---
 
-**Version**: 1.0.0  
-**Last Updated**: March 20, 2026
+**Version**: 1.3.7  
+**Last Updated**: April 11, 2026

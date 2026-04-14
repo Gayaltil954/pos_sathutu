@@ -29,6 +29,12 @@ public class CategoryService {
     }
 
     public Category addCategory(Category category) {
+        if (category.getName() != null) {
+            category.setName(category.getName().trim());
+        }
+        if (category.getDescription() != null) {
+            category.setDescription(category.getDescription().trim());
+        }
         category.setCreatedAt(LocalDateTime.now());
         category.setActive(true);
         return categoryRepository.save(category);
@@ -50,8 +56,8 @@ public class CategoryService {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
             Category existingCategory = category.get();
-            if (categoryDetails.getName() != null) existingCategory.setName(categoryDetails.getName());
-            if (categoryDetails.getDescription() != null) existingCategory.setDescription(categoryDetails.getDescription());
+            if (categoryDetails.getName() != null) existingCategory.setName(categoryDetails.getName().trim());
+            if (categoryDetails.getDescription() != null) existingCategory.setDescription(categoryDetails.getDescription().trim());
             if (categoryDetails.getActive() != null) existingCategory.setActive(categoryDetails.getActive());
             return categoryRepository.save(existingCategory);
         }

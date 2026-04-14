@@ -15,6 +15,8 @@
                         <Label text="Select Date:" style="-fx-alignment: CENTER;"/>
                         <DatePicker fx:id="datePickerDaily"/>
                         <Button text="Load Summary" onAction="#loadDailySummary" style="-fx-padding: 5 15;"/>
+                        <Button text="Download PDF" onAction="#downloadDailyPdf" style="-fx-padding: 5 15;"/>
+                        <Button text="Download Excel" onAction="#downloadDailyExcel" style="-fx-padding: 5 15;"/>
                     </HBox>
 
                     <GridPane hgap="30" vgap="20" style="-fx-padding: 20; -fx-border-color: #bdc3c7; -fx-border-width: 1;">
@@ -24,9 +26,23 @@
                         <Label text="Total Discount:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                         <Label fx:id="dailyTotalDiscountLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #e74c3c;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                        <Label text="Transactions:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <Label fx:id="dailyTransactionsLabel" text="0" style="-fx-font-size: 16; -fx-text-fill: #3498db;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label text="Net Total:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label fx:id="dailyNetTotalLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #16a085;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Total Actual Price:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <Label fx:id="dailyTotalActualPriceLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #8e44ad;" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <Label text="Subtotal (Net - Actual):" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                        <Label fx:id="dailyReportSubtotalLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #2c3e50;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                        <Label text="Orders Completed:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                        <Label fx:id="dailyTransactionsLabel" text="0" style="-fx-font-size: 16; -fx-text-fill: #3498db;" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
                     </GridPane>
+
+                    <VBox spacing="5" style="-fx-padding: 5 0 0 0;">
+                        <Label text="Order Details (Items Sold &amp; Quantity):" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+                        <TextArea fx:id="dailyOrdersDetailsArea" editable="false" wrapText="true" prefHeight="220"/>
+                    </VBox>
                 </VBox>
             </Tab>
 
@@ -37,6 +53,8 @@
                         <Label text="Select Month:" style="-fx-alignment: CENTER;"/>
                         <ComboBox fx:id="monthCombo" prefWidth="150"/>
                         <Button text="Load Summary" onAction="#loadMonthlySummary" style="-fx-padding: 5 15;"/>
+                        <Button text="Download PDF" onAction="#downloadMonthlyPdf" style="-fx-padding: 5 15;"/>
+                        <Button text="Download Excel" onAction="#downloadMonthlyExcel" style="-fx-padding: 5 15;"/>
                     </HBox>
 
                     <GridPane hgap="30" vgap="20" style="-fx-padding: 20; -fx-border-color: #bdc3c7; -fx-border-width: 1;">
@@ -46,9 +64,66 @@
                         <Label text="Total Discount:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                         <Label fx:id="monthlyTotalDiscountLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #e74c3c;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                        <Label text="Transactions:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <Label fx:id="monthlyTransactionsLabel" text="0" style="-fx-font-size: 16; -fx-text-fill: #3498db;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label text="Net Total:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label fx:id="monthlyNetTotalLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #16a085;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Total Actual Price:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <Label fx:id="monthlyTotalActualPriceLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #8e44ad;" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <Label text="Subtotal (Net - Actual):" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                        <Label fx:id="monthlyReportSubtotalLabel" text="Rs 0.00" style="-fx-font-size: 16; -fx-text-fill: #2c3e50;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                        <Label text="Orders Completed:" style="-fx-font-size: 14; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                        <Label fx:id="monthlyTransactionsLabel" text="0" style="-fx-font-size: 16; -fx-text-fill: #3498db;" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
                     </GridPane>
+
+                    <VBox spacing="5" style="-fx-padding: 5 0 0 0;">
+                        <Label text="Order Details (Items Sold &amp; Quantity):" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+                        <TextArea fx:id="monthlyOrdersDetailsArea" editable="false" wrapText="true" prefHeight="220"/>
+                    </VBox>
+                </VBox>
+            </Tab>
+
+            <Tab text="Edit Sale" closable="false">
+                <VBox spacing="12" style="-fx-padding: 20;">
+                    <HBox spacing="10">
+                        <Label text="Sale ID:" style="-fx-alignment: CENTER;"/>
+                        <TextField fx:id="editSaleIdField" prefWidth="260" promptText="Enter sale ID" onAction="#loadSaleForEdit"/>
+                        <Button text="Load Sale" onAction="#loadSaleForEdit" style="-fx-padding: 5 15;"/>
+                        <Button text="Load Recent" onAction="#loadLatestSales" style="-fx-padding: 5 15;"/>
+                    </HBox>
+
+                    <HBox spacing="10">
+                        <ComboBox fx:id="editProductPicker" prefWidth="260" promptText="Select product to add"/>
+                        <Button text="Add Item" onAction="#addItemToEditableSale" style="-fx-padding: 5 15;"/>
+                        <Button text="Edit Qty" onAction="#editSelectedItemQuantity" style="-fx-padding: 5 15;"/>
+                        <Button text="Edit Price" onAction="#editSelectedItemPrice" style="-fx-padding: 5 15;"/>
+                        <Button text="Remove Item" onAction="#removeSelectedItem" style="-fx-padding: 5 15;"/>
+                    </HBox>
+
+                    <TableView fx:id="editableSaleTable" prefHeight="260">
+                        <columns>
+                            <TableColumn fx:id="editProductNameColumn" text="Product" prefWidth="220"/>
+                            <TableColumn fx:id="editCategoryColumn" text="Category" prefWidth="130"/>
+                            <TableColumn fx:id="editQuantityColumn" text="Qty" prefWidth="80"/>
+                            <TableColumn fx:id="editPriceColumn" text="Price" prefWidth="110"/>
+                            <TableColumn fx:id="editLineTotalColumn" text="Line Total" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+
+                    <HBox spacing="15">
+                        <Label text="Subtotal:" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="editableSubtotalLabel" text="Rs 0.00"/>
+                        <Label text="Discount:" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="editableDiscountField" prefWidth="120" promptText="0"/>
+                        <Label text="Net Total:" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="editableNetTotalLabel" text="Rs 0.00"/>
+                    </HBox>
+
+                    <HBox spacing="10">
+                        <Button text="Save Sale Changes" onAction="#saveEditedSale" style="-fx-padding: 8 20;"/>
+                        <Label fx:id="editSaleStatusLabel" text="Load a sale to begin editing." style="-fx-text-fill: #2c3e50;"/>
+                    </HBox>
                 </VBox>
             </Tab>
         </TabPane>

@@ -2,6 +2,11 @@
 
 Complete step-by-step setup guide for the POS System.
 
+## Release Version
+
+- Current setup target: 1.3.7
+- Includes editable sales, low stock alerts, automatic stock sync, and in-app update notifications
+
 ## Prerequisites Check
 
 ```bash
@@ -174,6 +179,23 @@ winget install --id WiXToolset.WiXToolset --accept-package-agreements --accept-s
 4. Double-click shortcut to open app
 
 The frontend now auto-starts bundled backend jar when backend is not already running.
+
+### Updating Existing Local Installations
+
+If a laptop already has POS System installed locally, the new 1.3.7 installer will upgrade it in place.
+
+Steps:
+
+1. Close POS System on the client laptop
+2. Run the new installer generated from `dist/installer`
+3. Complete setup (same install location recommended)
+4. Open POS System again
+
+Notes:
+
+- Existing local app is updated (not installed as a separate duplicate app)
+- Existing MongoDB data remains unchanged
+- Desktop/start menu shortcuts continue to work after update
 
 ### Database Requirement
 

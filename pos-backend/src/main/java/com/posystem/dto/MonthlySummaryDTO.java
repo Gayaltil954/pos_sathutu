@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -17,9 +18,17 @@ public class MonthlySummaryDTO {
 
     private double totalDiscount;
 
+    private double netTotal;
+
+    private double totalActualPrice;
+
+    private double reportSubtotal;
+
     private Map<String, Integer> mostSoldProducts;
 
     private Map<String, Double> categoryWiseSales;
 
     private String month;
+
+    private List<OrderDetailDTO> orders;
 }

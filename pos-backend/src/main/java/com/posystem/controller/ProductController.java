@@ -55,6 +55,32 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(products, "Search results"));
     }
 
+    @GetMapping("/low-stock")
+    public ResponseEntity<ApiResponse<List<Product>>> getLowStockProducts(
+            @RequestParam(required = false) Integer threshold) {
+        try {
+            List<Product> products = productService.getLowStockProducts(threshold);
+            return ResponseEntity.ok(ApiResponse.success(products, "Low stock products fetched"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Error fetching low stock products: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/low-stock/count")
+    public ResponseEntity<ApiResponse<Integer>> getLowStockCount(
+            @RequestParam(required = false) Integer threshold) {
+        try {
+            int count = productService.getLowStockProducts(threshold).size();
+            return ResponseEntity.ok(ApiResponse.success(count, "Low stock count fetched"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Error fetching low stock count: " + e.getMessage()));
+        }
+    }
+
     @GetMapping("/search/advanced")
     public ResponseEntity<ApiResponse<List<Product>>> searchAdvanced(
             @RequestParam(required = false) String name,

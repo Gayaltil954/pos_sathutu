@@ -14,4 +14,6 @@ public interface SaleRepository extends MongoRepository<Sale, String> {
     List<Sale> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     List<Sale> findByDateGreaterThanEqualAndDateLessThan(LocalDateTime startDate, LocalDateTime endDate);
+
+    List<Sale> findTop20ByOrderByDateDesc();
 }

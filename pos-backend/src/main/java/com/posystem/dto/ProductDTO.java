@@ -17,6 +17,8 @@ public class ProductDTO {
 
     private double price;
 
+    private double basePrice;
+
     private String qrCode;
 
     private int stock;

@@ -18,7 +18,10 @@
                 
                 <Label text="Search:" style="-fx-alignment: CENTER;"/>
                 <TextField fx:id="searchBar" prefWidth="200" promptText="Search by product name..."/>
+
+                <Button text="Refresh" onAction="#refreshPosData" style="-fx-padding: 6 12;"/>
             </HBox>
+            <Label fx:id="lowStockAlertLabel" text="" visible="false" managed="false" style="-fx-text-fill: #c0392b; -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 4 0 0 0;"/>
         </VBox>
     </top>
 
@@ -65,6 +68,11 @@
                 </VBox>
 
                 <!-- Action Buttons -->
+                <HBox spacing="5">
+                    <Button text="Update Qty" style="-fx-padding: 10;" onAction="#updateQuantity" HBox.hgrow="ALWAYS" prefWidth="100"/>
+                    <Button text="Update Price" style="-fx-padding: 10;" onAction="#updatePrice" HBox.hgrow="ALWAYS" prefWidth="100"/>
+                    <Button text="Remove" style="-fx-padding: 10;" onAction="#removeFromCart" HBox.hgrow="ALWAYS" prefWidth="100"/>
+                </HBox>
                 <HBox spacing="5">
                     <Button text="Checkout" style="-fx-padding: 10;" onAction="#checkout" HBox.hgrow="ALWAYS" prefWidth="100"/>
                     <Button text="Clear" style="-fx-padding: 10;" onAction="#clearCart" HBox.hgrow="ALWAYS" prefWidth="100"/>

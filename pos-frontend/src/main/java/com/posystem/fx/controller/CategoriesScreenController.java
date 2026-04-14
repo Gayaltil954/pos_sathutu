@@ -2,6 +2,7 @@ package com.posystem.fx.controller;
 
 import com.posystem.fx.dto.CategoryDTO;
 import com.posystem.fx.service.ApiService;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -12,10 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @RequiredArgsConstructor
-public class CategoriesScreenController {
+public class CategoriesScreenController implements RefreshableView {
 
     private final ApiService apiService;
 
@@ -41,11 +43,27 @@ public class CategoriesScreenController {
     private Button addCategoryButton;
 
     private String editingCategoryId;
+    private boolean dataLoadStarted;
+    private boolean initialDataLoaded;
 
     @FXML
     public void initialize() {
         setupTable();
-        refreshCategories();
+        dataLoadStarted = true;
+        refreshCategories(true);
+    }
+
+    @Override
+    public void onViewActivated() {
+        if (!initialDataLoaded && !dataLoadStarted) {
+            dataLoadStarted = true;
+            refreshCategories(true);
+            return;
+        }
+
+        if (initialDataLoaded) {
+            refreshCategories(true);
+        }
     }
 
     private void setupTable() {
@@ -82,50 +100,62 @@ public class CategoriesScreenController {
 
     @FXML
     private void refreshCategories() {
-        try {
-            List<CategoryDTO> categories = apiService.getAllCategories();
-            categoryTable.setItems(FXCollections.observableArrayList(categories));
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Failed to load categories");
-        }
+        refreshCategories(true);
+    }
+
+    private void refreshCategories(boolean forceRefresh) {
+        CompletableFuture
+                .supplyAsync(() -> apiService.getAllCategories(forceRefresh))
+                .thenAccept(categories -> Platform.runLater(() ->
+                        {
+                            categoryTable.setItems(FXCollections.observableArrayList(categories));
+                            initialDataLoaded = true;
+                        }))
+                .exceptionally(ex -> {
+                    Platform.runLater(() -> showError("Failed to load categories: " + ex.getMessage()));
+                    return null;
+                });
     }
 
     @FXML
     private void addCategory() {
-        try {
-            if (nameField.getText().isEmpty()) {
-                showError("Category name is required");
-                return;
-            }
+        String name = nameField.getText();
+        String description = descriptionField.getText();
+        String categoryId = editingCategoryId;
 
-            CategoryDTO category = new CategoryDTO();
-            category.setName(nameField.getText());
-            category.setDescription(descriptionField.getText());
-            category.setActive(true);
-
-            CategoryDTO savedCategory;
-            if (editingCategoryId != null) {
-                savedCategory = apiService.updateCategory(editingCategoryId, category);
-                if (savedCategory == null || savedCategory.getId() == null) {
-                    showError("Failed to update category");
-                    return;
-                }
-                showInfo("Category updated successfully");
-            } else {
-                savedCategory = apiService.addCategory(category);
-                if (savedCategory == null || savedCategory.getId() == null) {
-                    showError("Failed to save category to database");
-                    return;
-                }
-                showInfo("Category added successfully");
-            }
-
-            clearFields();
-            refreshCategories();
-        } catch (Exception e) {
-            showError("Error saving category: " + e.getMessage());
+        if (name == null || name.isBlank()) {
+            showError("Category name is required");
+            return;
         }
+
+        CompletableFuture
+                .supplyAsync(() -> {
+                    try {
+                        CategoryDTO category = new CategoryDTO();
+                        category.setName(name);
+                        category.setDescription(description);
+                        category.setActive(true);
+                        return categoryId != null
+                                ? apiService.updateCategory(categoryId, category)
+                                : apiService.addCategory(category);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .thenAccept(savedCategory -> Platform.runLater(() -> {
+                    if (savedCategory == null || savedCategory.getId() == null) {
+                        showError(categoryId != null ? "Failed to update category" : "Failed to save category to database");
+                        return;
+                    }
+
+                    showInfo(categoryId != null ? "Category updated successfully" : "Category added successfully");
+                    clearFields();
+                    refreshCategories();
+                }))
+                .exceptionally(ex -> {
+                    Platform.runLater(() -> showError("Error saving category: " + ex.getMessage()));
+                    return null;
+                });
     }
 
     @FXML
@@ -148,21 +178,24 @@ public class CategoriesScreenController {
             return;
         }
 
-        try {
-            boolean deleted = apiService.deleteCategory(category.getId());
-            if (!deleted) {
-                showError("Failed to delete category");
-                return;
-            }
+        CompletableFuture
+                .supplyAsync(() -> apiService.deleteCategory(category.getId()))
+                .thenAccept(deleted -> Platform.runLater(() -> {
+                    if (!deleted) {
+                        showError("Failed to delete category");
+                        return;
+                    }
 
-            showInfo("Category deleted successfully");
-            if (category.getId().equals(editingCategoryId)) {
-                clearFields();
-            }
-            refreshCategories();
-        } catch (Exception e) {
-            showError("Error deleting category: " + e.getMessage());
-        }
+                    showInfo("Category deleted successfully");
+                    if (category.getId().equals(editingCategoryId)) {
+                        clearFields();
+                    }
+                    refreshCategories();
+                }))
+                .exceptionally(ex -> {
+                    Platform.runLater(() -> showError("Error deleting category: " + ex.getMessage()));
+                    return null;
+                });
     }
 
     private void startEditCategory(CategoryDTO category) {

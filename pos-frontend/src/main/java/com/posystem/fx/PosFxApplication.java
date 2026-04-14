@@ -32,6 +32,7 @@ public class PosFxApplication extends Application {
     private static ConfigurableApplicationContext springContext;
     private static ConfigurableApplicationContext backendContext;
     private static boolean backendStartedByApp;
+    private static volatile boolean shutdownInitiated;
     private Parent root;
 
     @Override
@@ -53,10 +54,7 @@ public class PosFxApplication extends Application {
         stage.setTitle("POS System - SATHUTU MOBILE SHOP");
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {
-            if (springContext != null) {
-                springContext.close();
-            }
-            stopBackendIfStartedByApp();
+            shutdownApplication();
             System.exit(0);
         });
         stage.show();
@@ -87,7 +85,16 @@ public class PosFxApplication extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        if (springContext != null) {
+        shutdownApplication();
+    }
+
+    public static synchronized void shutdownApplication() {
+        if (shutdownInitiated) {
+            return;
+        }
+        shutdownInitiated = true;
+
+        if (springContext != null && springContext.isActive()) {
             springContext.close();
         }
         stopBackendIfStartedByApp();
